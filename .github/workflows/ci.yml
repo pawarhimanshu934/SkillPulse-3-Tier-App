@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build and push Backend Docker image
         uses: docker/build-push-action@v7
         with:
           context: ./backend
@@ -28,3 +28,12 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-backend:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-backend:latest
+
+      - name: Build and push Frontend Docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-frontend:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-frontend:latest
