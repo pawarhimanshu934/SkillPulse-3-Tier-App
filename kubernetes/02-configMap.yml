@@ -4,8 +4,9 @@ metadata:
   name: mysql-config
   namespace: skillpulse-ns
 data:
-  DB_HOST: db
+  DB_HOST: mysql-service
   DB_PORT: "3306"
   DB_USER: skillpulse
   DB_NAME: skillpulse 
-
+  MYSQL_USER: skillpulse
+  MYSQL_DATABASE: skillpulse

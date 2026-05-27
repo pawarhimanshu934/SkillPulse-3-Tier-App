@@ -1,0 +1,31 @@
+kind: Deployment
+apiVersion: apps/v1
+
+metadata:
+  name: backend-deployment
+  namespace: skillpulse-ns
+  labels:
+    app: backend
+  
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+
+  template:
+    metadata:
+      labels: 
+        app: backend      
+    spec:
+      containers:
+        - name: backend
+          image: hiimanshupawar/skillpulse-backend:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: mysql-config
+            - secretRef:
+                name: mysql-secret
+  
