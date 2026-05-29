@@ -3,9 +3,12 @@ name: CI
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'kubernetes/**'
 
 jobs:
   build-and-push:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -37,3 +40,29 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-frontend:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-frontend:latest
+
+  
+  update-kubernetes-manifests:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          repository: pawarhimanshu934/SkillPulse-3-Tier-App
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Update Kubernetes manifests with new image tags
+        run: |
+          sed -i "s|image: .*/skillpulse-backend:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-backend:${{ github.sha }}|g" kubernetes/06-backend-deployment.yml
+          sed -i "s|image: .*/skillpulse-frontend:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-frontend:${{ github.sha }}|g" kubernetes/04-frontend-deployment.yml
+
+      - name: Commit and push updated manifests
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github"
+
+          git add kubernetes/*
+          git commit -m "Update Kubernetes manifests with new image tags for commit ${{ github.sha }}" || echo "No changes to commit"
+          git push origin main

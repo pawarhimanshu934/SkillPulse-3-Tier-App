@@ -4,7 +4,7 @@ metadata:
   name: mysql-config
   namespace: skillpulse-ns
 data:
-  DB_HOST: mysql-service
+  DB_HOST: mysql-service #name of statefulset service
   DB_PORT: "3306"
   DB_USER: skillpulse
   DB_NAME: skillpulse 
