@@ -6,13 +6,26 @@ module "eks" {
   kubernetes_version = "1.30"
 
   addons = {
-    coredns                = {}
+    coredns = {}
     eks-pod-identity-agent = {
       before_compute = true
     }
-    kube-proxy             = {}
-    vpc-cni                = {
+    kube-proxy = {}
+    vpc-cni = {
       before_compute = true
+    }
+
+  }
+
+  # Optional: Additional security group rules to add to the cluster security group. This is useful for allowing access to the cluster from other security groups, such as a bastion host or CI/CD system.
+  node_security_group_additional_rules = {
+    ingress_self_all = {
+      description = "Node to node all ports/protocols"
+      protocol    = "-1"
+      from_port   = 0
+      to_port     = 0
+      type        = "ingress"
+      self        = true
     }
   }
 
@@ -39,7 +52,7 @@ module "eks" {
       desired_size = 2
 
       capacity_type = "SPOT"
-      disk_size = 30
+      disk_size     = 30
 
       labels = {
         "node-group" = "easyshop"
