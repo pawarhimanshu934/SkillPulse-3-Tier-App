@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: hiimanshupawar/skillpulse-backend:latest
+          image: hiimanshupawar/skillpulse-backend:c19a3dbcf3473c2421c0239d4ff02ea0adeff9ed
           ports:
             - containerPort: 8080
           envFrom:

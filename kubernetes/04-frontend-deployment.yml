@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: hiimanshupawar/skillpulse-frontend:latest
+          image: hiimanshupawar/skillpulse-frontend:c19a3dbcf3473c2421c0239d4ff02ea0adeff9ed
           ports:
             - containerPort: 80
             
